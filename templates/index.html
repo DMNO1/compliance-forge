@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComplianceForge — 中国法规合规文档自动生成</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a56db',
+                        primaryDark: '#1e40af',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a56db 0%, #7c3aed 100%);
+        }
+        .doc-content {
+            white-space: pre-wrap;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner { animation: spin 1s linear infinite; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-12 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl font-bold mb-3">⚙️ ComplianceForge</h1>
+            <p class="text-xl text-blue-100">中国法规合规文档自动生成 · DSL / PIPL / GB-T 35273</p>
+            <p class="text-sm text-blue-200 mt-2">填表 → 生成 → 下载，3分钟搞定合规文档</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Features -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-lg p-5 shadow-sm border">
+                <div class="text-2xl mb-2">📋</div>
+                <h3 class="font-semibold text-gray-800">隐私政策</h3>
+                <p class="text-sm text-gray-500">符合PIPL要求的完整隐私政策</p>
+            </div>
+            <div class="bg-white rounded-lg p-5 shadow-sm border">
+                <div class="text-2xl mb-2">🔍</div>
+                <h3 class="font-semibold text-gray-800">DPIA评估</h3>
+                <p class="text-sm text-gray-500">个人信息保护影响评估报告</p>
+            </div>
+            <div class="bg-white rounded-lg p-5 shadow-sm border">
+                <div class="text-2xl mb-2">⚖️</div>
+                <h3 class="font-semibold text-gray-800">法规引用</h3>
+                <p class="text-sm text-gray-500">自动标注DSL/PIPL/GB-T 35273条文</p>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 border">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">生成合规文档</h2>
+            
+            <form id="genForm" class="space-y-5">
+                <!-- Doc Type -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">文档类型 *</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center p-3 border-2 rounded-lg cursor-pointer hover:border-primary transition doc-type-option border-primary bg-blue-50">
+                            <input type="radio" name="doc_type" value="privacy_policy" checked class="mr-3">
+                            <div>
+                                <div class="font-medium">📋 隐私政策</div>
+                                <div class="text-xs text-gray-500">用户隐私政策文档</div>
+                            </div>
+                        </label>
+                        <label class="flex items-center p-3 border-2 rounded-lg cursor-pointer hover:border-primary transition doc-type-option">
+                            <input type="radio" name="doc_type" value="dpia" class="mr-3">
+                            <div>
+                                <div class="font-medium">🔍 DPIA评估</div>
+                                <div class="text-xs text-gray-500">个人信息保护影响评估</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Company & App Name -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">公司名称 *</label>
+                        <input type="text" name="company_name" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                            placeholder="示例科技有限公司">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">应用/产品名称 *</label>
+                        <input type="text" name="app_name" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                            placeholder="示例App">
+                    </div>
+                </div>
+
+                <!-- Data Types -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">收集的个人信息类型</label>
+                    <input type="text" name="data_types" 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                        placeholder="姓名、手机号、邮箱、地址" value="姓名、手机号、邮箱">
+                    <p class="text-xs text-gray-400 mt-1">用中文逗号分隔，如：姓名、手机号、邮箱</p>
+                </div>
+
+                <!-- Purposes -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">处理目的</label>
+                    <textarea name="purposes" rows="2"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                        placeholder="提供在线课程服务、发送课程通知、处理用户订单">提供服务</textarea>
+                </div>
+
+                <!-- Retention & Industry -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">保存期限</label>
+                        <input type="text" name="retention"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                            placeholder="服务期间及服务终止后3年" value="服务期间及服务终止后3年">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">所属行业</label>
+                        <select name="industry"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary outline-none">
+                            <option value="通用">通用</option>
+                            <option value="电商">电商</option>
+                            <option value="教育">教育</option>
+                            <option value="金融">金融</option>
+                            <option value="医疗">医疗健康</option>
+                            <option value="SaaS">SaaS/软件</option>
+                            <option value="社交">社交/社区</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Cross-border -->
+                <div>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="has_cross_border" class="w-4 h-4 text-primary rounded">
+                        <span class="text-sm text-gray-700">涉及个人信息跨境传输</span>
+                    </label>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-primaryDark transition flex items-center justify-center gap-2">
+                    <span>⚙️</span>
+                    <span>生成合规文档</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Result -->
+        <div id="resultSection" class="hidden mt-8">
+            <div class="bg-white rounded-xl shadow-md border overflow-hidden">
+                <div class="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+                    <h3 class="font-semibold" id="resultTitle">生成结果</h3>
+                    <div class="flex gap-2">
+                        <button onclick="copyDoc()" class="bg-gray-600 hover:bg-gray-500 px-3 py-1.5 rounded text-sm transition">
+                            📋 复制
+                        </button>
+                        <button onclick="downloadDoc()" class="bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded text-sm transition">
+                            ⬇️ 下载
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 max-h-[70vh] overflow-y-auto">
+                    <div id="docContent" class="doc-content text-gray-800 leading-relaxed"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error -->
+        <div id="errorSection" class="hidden mt-8 bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+            <strong>❌ 生成失败：</strong>
+            <span id="errorMessage"></span>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-4xl mx-auto px-4 py-8 text-center text-gray-400 text-sm">
+        <p>ComplianceForge v0.1.0 · 依据《个人信息保护法》《网络安全法》GB/T 35273-2020</p>
+        <p class="mt-1">⚠️ 生成的文档仅供参考，建议经法务审核后使用</p>
+    </footer>
+
+    <script>
+        let generatedContent = '';
+        let generatedDocName = '';
+
+        // Doc type selection styling
+        document.querySelectorAll('input[name="doc_type"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                document.querySelectorAll('.doc-type-option').forEach(el => {
+                    el.classList.remove('border-primary', 'bg-blue-50');
+                });
+                radio.closest('.doc-type-option').classList.add('border-primary', 'bg-blue-50');
+            });
+        });
+
+        document.getElementById('genForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const resultSection = document.getElementById('resultSection');
+            const errorSection = document.getElementById('errorSection');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="spinner w-5 h-5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/><path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor" opacity="0.75"/></svg><span>生成中，请稍候...</span>';
+            resultSection.classList.add('hidden');
+            errorSection.classList.add('hidden');
+
+            try {
+                const formData = new FormData(e.target);
+                const resp = await fetch('/api/generate', {
+                    method: 'POST',
+                    body: formData,
+                });
+                
+                const data = await resp.json();
+                
+                if (data.success) {
+                    generatedContent = data.content;
+                    generatedDocName = data.doc_name;
+                    document.getElementById('resultTitle').textContent = `${data.doc_name} — ${data.company_name}`;
+                    document.getElementById('docContent').textContent = data.content;
+                    resultSection.classList.remove('hidden');
+                    resultSection.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    throw new Error(data.detail || '生成失败');
+                }
+            } catch (err) {
+                document.getElementById('errorMessage').textContent = err.message;
+                errorSection.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>⚙️</span><span>生成合规文档</span>';
+            }
+        });
+
+        function copyDoc() {
+            navigator.clipboard.writeText(generatedContent).then(() => {
+                alert('已复制到剪贴板！');
+            });
+        }
+
+        function downloadDoc() {
+            const blob = new Blob([generatedContent], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${generatedDocName}.md`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
