@@ -10,8 +10,6 @@ from pathlib import Path
 from typing import Optional
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, PlainTextResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,11 +19,15 @@ app = FastAPI(title="ComplianceForge", version="0.1.0")
 # Paths
 BASE_DIR = Path(__file__).parent
 KNOWLEDGE_DIR = BASE_DIR / "knowledge_base"
-TEMPLATES_DIR = BASE_DIR / "templates"
-STATIC_DIR = BASE_DIR / "static"
 
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
-templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
+# Conditional template/static mounting (Vercel serverless has read-only fs)
+templates = None
+if (BASE_DIR / "templates").exists():
+    from fastapi.templating import Jinja2Templates
+    templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+if (BASE_DIR / "static").exists():
+    from fastapi.staticfiles import StaticFiles
+    app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 # DeepSeek API config
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
@@ -635,6 +637,13 @@ async def health():
         "knowledge_base": list(kb.keys()),
         "llm_configured": bool(DEEPSEEK_API_KEY),
     }
+
+# Vercel serverless handler
+try:
+    from mangum import Mangum
+    handler = Mangum(app)
+except ImportError:
+    handler = app
 
 if __name__ == "__main__":
     import uvicorn
