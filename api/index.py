@@ -302,14 +302,14 @@ def generate_fallback(doc_type: str, company: str, app_name: str,
 """
 
 
-async def call_deepseek(system_prompt: str, user_prompt: str) -> str:
+def call_deepseek(system_prompt: str, user_prompt: str) -> str:
     """Call DeepSeek API. Returns None on failure."""
     if not DEEPSEEK_API_KEY:
         return None
     try:
         import httpx
-        async with httpx.AsyncClient(timeout=60) as client:
-            resp = await client.post(
+        with httpx.Client(timeout=60) as client:
+            resp = client.post(
                 DEEPSEEK_API_URL,
                 headers={
                     "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
@@ -438,7 +438,7 @@ def index():
 
 
 @app.post("/api/generate")
-async def generate_document():
+def generate_document():
     """Generate compliance document."""
     # Support both form data and JSON
     if request.is_json:
@@ -474,7 +474,7 @@ async def generate_document():
 
     system_prompt = f"""你是一位专业的中国数据合规顾问。请根据用户的业务信息，参考《个人信息保护法》《网络安全法》《GB/T 35273-2020》，生成一份专业、完整、合规的{doc_name}。引用的法规条文需标注出处。请生成完整的中文Markdown格式文档。"""
 
-    content = await call_deepseek(system_prompt, user_prompt)
+    content = call_deepseek(system_prompt, user_prompt)
     if not content:
         content = generate_fallback(doc_type, company_name, app_name, data_types, purposes, retention)
 
